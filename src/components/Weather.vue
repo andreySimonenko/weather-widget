@@ -224,7 +224,6 @@ export default class HelloWorld extends Vue {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  width: 100px;
 }
 
 .weather-info__temp-value {
@@ -248,7 +247,6 @@ export default class HelloWorld extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 70px;
 }
 
 .weather-daily {
