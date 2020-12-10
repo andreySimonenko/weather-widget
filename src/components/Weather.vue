@@ -1,21 +1,22 @@
 <template>
-  <div class="weather-widget">
+  <div class="weather-container">
     <div
       v-if="errorMsg"
-      class="error-msg"
+      class="weather-container__message error"
     >
       {{ errorMsg }}
     </div>
     <div
       v-else-if="statusMsg"
-      class="status-msg"
+      class="weather-container__message status"
     >
       {{ statusMsg }}
     </div>
     <div
       v-else-if="currentData"
+      class="weather-widget weather-container__widget"
     >
-      <div class="header">
+      <div class="header weather-widget__header">
         <h1 class="header__title">{{ location }}</h1>
         <button
           class="header__location-btn"
@@ -25,9 +26,9 @@
         </button>
       </div>
 
-      <div>{{ weekday }}</div>
-      <div>{{ desc }}</div>
-      <div class="weather-info">
+      <div class="weather-widget__weekday">{{ weekday }}</div>
+      <div class="weather-widget__desc">{{ desc }}</div>
+      <div class="weather-info weather-widget__info">
         <img class="weather-info__icon" :src="iconUrl" />
         <div class="weather-info__temp">
           <span class="weather-info__temp-value">{{ temp }}</span>
@@ -51,7 +52,7 @@
         </div>
       </div>
 
-      <div class="weather-daily">
+      <div class="weather-daily weather-widget__daily">
         <div
           v-for="dayWeather in dailyWeather"
           :key="dayWeather.dt"
@@ -146,12 +147,12 @@ export default class HelloWorld extends Vue {
   async loadWeatherByGeo (): Promise<void> {
     try {
       this.statusMsg = await GeoLocationService.isAllowLocation()
-        ? 'Получение местоположения'
-        : 'Для получения информации о погоде, необходимо разрешите доступ на определение Вашего местоположения.'
+        ? 'Определение местоположения.'
+        : 'Для получения прогноза погоды, требуется разрешить доступ на определение Вашего местоположения.'
       const coords = await GeoLocationService.getBrowserLocation()
       this.location = await DadataService.getLocationByCoords(coords.latitude, coords.longitude)
 
-      this.statusMsg = 'Получение информации о погоде'
+      this.statusMsg = 'Получаем прогноз погоды.'
       const data = await OpenweathermapService.getByCoords(coords.latitude, coords.longitude)
       this.currentData = data.current
       this.dailyData = data.daily
@@ -186,13 +187,34 @@ export default class HelloWorld extends Vue {
 </script>
 
 <style scoped lang="scss">
+
+.weather-container {}
+
+.weather-container__message {
+  border: 2px solid #b44444;
+  padding: 15px;
+  border-radius: 10px;
+
+  &.error {
+    background-color: #ffb5b5;
+    border-color: #b44444;
+  }
+
+  &.status {
+    background-color: #8efca1;
+    border-color: #37a64f;
+  }
+}
+
+.weather-container__widget {
+  max-width: 900px;
+}
+
 .weather-widget {
   border: 1px solid #c5c8cd;
   border-radius: 10px;
-  font-family: Roboto;
   color: #878787;
   padding: 20px;
-  max-width: 900px;
 }
 .header {
   display: flex;
@@ -251,8 +273,11 @@ export default class HelloWorld extends Vue {
 
 .weather-daily {
   display: flex;
-  margin-top: 45px;
   overflow-x: auto;
+}
+
+.weather-widget__daily {
+  margin-top: 45px;
 }
 
 .weather-daily__item {

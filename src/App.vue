@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="app">
     <Weather />
   </div>
 </template>
@@ -17,8 +17,8 @@ export default class App extends Vue {}
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+.app {
+  font-family: Roboto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
